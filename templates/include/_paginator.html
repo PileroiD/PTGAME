@@ -1,0 +1,31 @@
+{% if page_obj.has_other_pages %}
+    <div class="paginate wrapper">
+        <ul>
+            <li>
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}">&lang;</a>
+                {% endif %}
+            </li>
+
+            {% for p in page_obj.paginator.page_range %}
+                {% if page_obj.number == p %}
+                    <li>
+                        <a href="" class="active">{{ p }}</a>
+                    </li>
+                {% elif p > page_obj.number|add:-3 and p < page_obj.number|add:3 %}
+                    <li>
+                        <a href="?page={{ p }}">{{ p }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            <li>
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">&rang;</a>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+{% else %}
+<span></span>
+{% endif %}

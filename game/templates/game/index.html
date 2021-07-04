@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% load game_tags %}
+{% load static %}
+
+{% block title %}PTGAMES: Games{% endblock title %}
+
+{% block content %}
+<section class="ab-info-main py-md-5 py-4 editContent" style="padding-left: 3rem; padding-right: 3rem;">
+    <div class="container-fluid py-md-3">
+        <div class="row">
+
+            {% for_sidebar_inclusiontag md=4 percent=49 %}
+
+
+            <div class="left-ads-display col-lg-9">
+
+                {% if genre %}
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Жанр: {{ genre.title }}</li>
+                    </ol>
+                </nav>
+                <hr>
+                {% endif %}
+
+                {% if company %}
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                        <li class="breadcrumb-item"><a href="{{ referer }}">{{ game_from_bread }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ company.title }}</li>
+                    </ol>
+                </nav>
+                <hr>
+                {% endif %}
+
+                {% if category %}
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Категория: {{ category.title }}</li>
+                    </ol>
+                </nav>
+                <hr>
+                {% endif %}
+
+                {% if mostwaiting %}
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Самые ожидаемые игры:</li>
+                    </ol>
+                </nav>
+                <hr>
+                {% endif %}
+
+                {% if new %}
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Самые новые игры:</li>
+                    </ol>
+                </nav>
+                <hr>
+                {% endif %}
+
+
+                <div class="row">
+                    {% for game in game_list %}
+                    <div class="col-md-2 product-men">
+                        <div class="product-shoe-info editContent text-center mt-lg-4">
+                            <div class="men-thumb-item">
+                                <a href="{{ game.get_absolute_url }}"><img src="{{ game.poster.url }}"
+                                                                           style="height: 280px" class="img-fluid"
+                                                                           alt=""></a>
+                            </div>
+                            <div class="item-info-product">
+                                <h4 class="">
+                                    <a href="{{ game.get_absolute_url }}" class="editContent">{{ game.title }}</a>
+                                </h4>
+
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <h3 style="margin: 50px auto 0 auto;">По вашему запросу ничего не найдено</h3>
+                    {% endfor %}
+                </div>
+                <center>
+                    {% include 'include/_paginator.html' %}
+                </center>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

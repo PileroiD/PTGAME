@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}PTGAMES: Login{% endblock title %}
+
+{% block all_placeholder %}{% endblock all_placeholder %}
+
+{% block open %}
+<div class="signin">
+    <div class="signin__warp">
+        <div class="signin__content">
+            <div style="margin-bottom: 16px;">
+                <img src="{% static 'img/myicon2.webp' %}" style="width: 80px;margin-bottom: 18px;" alt="Logo" class="tm-site-logo"/>
+                <div class="tm-site-text-box">
+                    <a href="{% url 'home' %}"><h1 style="color:white" class="tm-site-title">PTGAMES</h1></a>
+                </div>
+            </div>
+            <div class="signin__form">
+                <ul class="nav nav-tabs" role="tablist">
+                    <div class="container">
+                        <div class="row">
+                            <li class="nav-item col-md-12">
+                                <a class="nav-link active" data-toggle="tab" href="#tabs-2" role="tab"
+                                   aria-selected="false">
+                                    Вход
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                        </div>
+                    </div>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                        <div class="signin__form__text">
+                            <p>при помощи социальных сетей:</p>
+                            <div class="signin__form__signup__social">
+                                <a href="{% url 'social:begin' 'facebook' %}" class="facebook"><i class="fab fa-facebook"></i></a>
+                                <a href="{% url 'social:begin' 'twitter' %}" class="twitter"><i class="fab fa-twitter"></i></a>
+                            </div>
+                            <div class="divide">или</div>
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <button type="submit" style="cursor: pointer;" class="site-btn">Войти</button>
+                            </form>
+                            <span><a href="{% url 'register' %}"><u style="color: black">Регистрация</u></a></span>
+                        </div>
+                        <a style="color: black;" href="{% url 'home' %}" class="far fa-arrow-alt-circle-left"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock open %}
+
+{% block footer %}{% endblock footer %}

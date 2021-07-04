@@ -1,0 +1,47 @@
+{% load static %}
+
+
+<div class="row tm-header-inner">
+    <div class="col-md-6 col-12" style="margin-top: 325px;">
+        <img src="{% static 'img/myicon2.webp' %}" style="width: 80px;margin-bottom: 25px;" alt="Logo"
+             class="tm-site-logo"/>
+        <div class="tm-site-text-box">
+            <a href="{% url 'home' %}"><h1 style="color:white; font-family: 'Lato';" class="tm-site-title">
+                PTGAMES•</h1></a>
+        </div>
+    </div>
+    <nav class="col-md-6 col-12 tm-nav">
+        <ul class="tm-nav-ul">
+            <li class="tm-nav-li"><a href="{% url 'home' %}" class="tm-nav-link border-button">Главная</a></li>
+            <li>
+                <!-- First Tier Drop Down -->
+                <label for="drop-2" class="toggle">Меню <span class="fa fa-angle-down"
+                                                              aria-hidden="true"></span> </label>
+                <a href="#" class="border-button" style="color: white;">Меню <span class="fa fa-angle-down"
+                                                                                   aria-hidden="true"></span></a>
+                <input type="checkbox" id="drop-2">
+                <ul>
+                    </li>
+                    <li><a class="menu_btn" href="{% url 'most_waiting' %}">Самые ожидаемые</a></li>
+                    <li><a class="menu_btn" href="{% url 'new_games' %}">Новые</a></li>
+                </ul>
+            </li>
+            {% if request.user.is_authenticated %}
+            <li style="margin-left: 10px; display:flex">
+                <div class="username" style="font-size: 22px;margin-right: 8px;">
+                    {{ user.username }}
+                </div>
+                <a href="{% url 'logout' %}" class="tm-nav-link border-button" style="color: white;">Выход</a>
+            </li>
+            {% else %}
+            <li class="tm-nav-li"><a href="{% url 'login' %}" class="tm-nav-link border-button">Вход</a></li>
+            <li class="tm-nav-li" style="padding-left: 0px;"><a href="{% url 'register' %}"
+                                                                class="tm-nav-link border-button">Регистрация</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+</div>
+
+

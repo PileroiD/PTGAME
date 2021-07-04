@@ -1,0 +1,355 @@
+{% extends 'base.html' %}
+
+{% load game_tags %}
+{% load static %}
+
+{% block title %}PTGAMES: {{ game.title }}{% endblock title %}
+
+{% if game.special_image %}
+{% block gameup_image %}
+<div class="parallax-window" data-parallax="scroll" data-image-src="{{ game.special_image.url }}">
+{% endblock gameup_image %}
+{% endif %}
+
+{% block content %}
+    <section class="ab-info-main py-md-5 py-4 editContent"
+             style="outline: none; outline-offset: -2px; cursor: inherit; color: rgb(33, 37, 41); font-size: 16px; background-color: rgba(0, 0, 0, 0); font-family: Lato, sans-serif;">
+        <div class="container py-md-3">
+            <div class="row">
+
+                {% for_sidebar_inclusiontag md=6 percent=100 %}
+
+                <div class="col-md-9 margin_bottom">
+                    <div class="row">
+
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12" style="text-align: center;">
+                            <div class="two-box">
+                                {% if game.poster %}
+                                <figure>
+                                    <a data-fancybox="gallery" href="{{ game.poster.url }}" style="padding: 0px; ">
+                                        <img src="{{ game.poster.url }}" style="width: 250px; height: auto;"></a>
+                                </figure>
+                                {% else %}
+                                <img src="https://pro-radio.ru/uploads/6/7/6725adce-e5cf-4c0d-8f6f-0382108b02b6.o.png"
+                                     alt="" style="width: 250px; height: auto;">
+                                {% endif %}
+                                <ul>
+                                    <li style="list-style-type: none;">
+                                        <form action="{% url 'add_rating' %}" method="post" name="rating">
+                                            {% csrf_token %}
+                                            <input type="hidden" value="{{ game.id }}" name="game">
+                                            <span class="rating">
+                                                {% for k, v in star_form.fields.star.choices %}
+                                                    <input type="radio" id="rating{{ k }}" name="star" value="{{ v }}">
+                                                    <label for="rating{{ v }}"></label>
+                                                {% endfor %}
+                                            </span>
+                                        </form>
+                                    </li>
+                                </ul>
+
+                                <hr>
+
+                                {% for image in game.gameshots_set.all %}
+                                <a data-fancybox="gallery" href="{{ image.image.url }}" style="padding: 0px; "><img
+                                        src="{{ image.image.url }}"
+                                        style="width: 250px; height: auto; margin-top: 10px"></a>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="col-xl-8 col-lg-8 col-md-8 col-sm-10">
+
+                            <div class="Games">
+                                <h1 style="margin-bottom: 10px">{{ game.title }}</h1>
+                                <hr>
+
+                                <h6>
+                                    <div>
+                                        Разработчик:
+                                    </div>
+                                    {% for company in game.company.all %}
+                                    <a href="{{ company.get_absolute_url }}" class="floating-button mybut"
+                                       style="font-size: 12px">{{ company.title }}</a>
+                                    {% endfor %}
+                                </h6>
+                                <hr style="margin-top: 5px">
+
+                                <h6 style="margin-top: 5px">Дата выхода: {{ game.date_of_issue|date:"j E Y" }}</h6>
+
+                                <h6 style="margin-top: 5px">Язык интерфейса: {{ game.interface_lang }}</h6>
+
+                                <h6 style="margin-top: 5px">Язык озвучки: {{ game.voice_acting_lang }}</h6>
+                                <hr style="margin-top: 5px">
+
+                                <h6 style="margin-top: 5px">
+                                    <div>Категории:</div>
+                                    {% for category in game.category.all %}
+                                    <a href="{{ category.get_absolute_url }}" class="floating-button mybut">{{ category.title }}</a>
+                                    {% endfor %}
+                                </h6>
+                                <hr style="margin-top: 5px">
+
+                                <h6 style="margin-top: 5px">
+                                    <div>Жанры:</div>
+                                    {% for genre in game.genre.all %}
+                                    <a href="{{ genre.get_absolute_url }}" class="floating-button mybut">{{ genre.title }}</a>
+                                    {% endfor %}
+                                </h6>
+
+                                <hr>
+                                <br>
+                                <table class="table table-sm table-light table-striped table-hover table-bordered">
+                                    <thead class="table-dark">
+                                    <tr>
+                                        <td colspan="4">Минимальные системные требования</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for param in game.minsysreq_set.all %}
+                                    <tr>
+                                        <td>ОС:</td>
+                                        <td>{{ param.oc }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Процессор:</td>
+                                        <td>{{ param.processor }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="1">Оперативная память:</td>
+                                        <td>{{ param.ozu }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Видеокарта:</td>
+                                        <td>{{ param.videocart }}</td>
+                                    </tr>
+                                    {% if param.directx %}
+                                    <tr>
+                                        <td>DirectX:</td>
+                                        <td>{{ param.directx }}</td>
+                                    </tr>
+                                    {% endif %}
+                                    <tr>
+                                        <td>Жесткий диск:</td>
+                                        <td>{{ param.placeondisk }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                <br>
+                                <span style="color: gray;">Количество просмотров: {{ game.views }}</span>
+                                <hr>
+
+                                <div style="font-size: small;padding: 0;line-height: initial;margin-bottom: 25px;"
+                                     class="col-md-12">
+                                    {{ game.content|safe }}
+                                </div>
+
+                                <hr>
+                                {% if game.videogameplay %}
+                                {{ game.videogameplay|safe }}
+                                {% else %}
+                                <span></span>
+                                {% endif %}
+                                <hr>
+
+
+                                <dir class="download container" style="text-align: center;">
+                                    <div class="row">
+                                        {% if game.torrentfile_set.all %}
+                                        {% for torrentfile in game.torrentfile_set.all %}
+                                        <div class="col-md-6">
+                                            <form method="post" action="{% url 'count' game.id %}"
+                                                  enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                                <h6 style="margin-bottom: 5px;">RePack от {{ torrentfile.repack_author }}
+                                                    <div class="dropdown far fa-question-circle">
+                                                        <div class="dropdown-content">
+                                                            <div>
+                                                                {{ torrentfile.descriptions|linebreaksbr|safe }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </h6>
+
+                                                <button class="floating-button" style="margin: 2px 0;line-height: 40px;"
+                                                        type="submit"
+                                                        name="click"
+                                                        onclick="AddToDatabase('{{ torrentfile.torrent_file.url }}')"
+                                                        value="{{ torrentfile.torrent_file.url }}">Скачать (Torrent)
+                                                </button>
+
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <h6 class="col-md-5">{{ torrentfile.torrent_file_size }}GB</h6>
+                                                        <h6 class="col-md-7 fas fa-arrow-circle-down"> {{ torrentfile.click_count }}</h6>
+                                                    </div>
+
+                                                </div>
+                                                <hr>
+                                            </form>
+                                        </div>
+                                        {% endfor %}
+                                        {% else %}
+                                        <p>Извините, торрент-файл не доступен или игру еще не взломали :(</p>
+                                        {% endif %}
+                                    </div>
+                                </dir>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-news">
+                        <div class="container">
+                            <hr>
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    {% if anothers %}
+                                    <h4 style="font-size: 20px;margin-bottom: 15px;">Также рекомендуем похожие
+                                        игры:</h4>
+                                    <div class="row">
+                                        {% for a_game in anothers %}
+                                        <div class="col-lg-4" style="padding: 5px">
+                                            <div class="mn-img">
+                                                <img style="width: 192px" src="{{ a_game.poster.url }}">
+                                                <div class="mn-title">
+                                                    <a href="{{ a_game.get_absolute_url }}">{{ a_game.title }}</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <hr>
+                                    {% endif %}
+
+                                    {% if game.reviews_set.count == 1 %}
+                                    <div class="widget__title">{{ game.reviews_set.count }} коментарий</div>
+                                    {% endif %}
+                                    {% if game.reviews_set.count > 1 and game.reviews_set.count < 5 %}
+                                    <div class="widget__title">{{ game.reviews_set.count }} коментария</div>
+                                    {% endif %}
+                                    {% if game.reviews_set.count >= 5 %}
+                                    <div class="widget__title">{{ game.reviews_set.count }} коментариев</div>
+                                    {% endif %}
+
+                                    {% if request.user.is_authenticated %}
+                                    <div class="single-post__leave__comment" style="text-align:center">
+                                        <form action="{% url 'comment' game.id %}" method="post" id="formReview">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="parent" id="contactparent" value="">
+                                            <div class="input-list">
+                                                <input type="text" placeholder="Имя..." name="name"
+                                                       value="{{ user.username }}" readonly required>
+                                                <input type="text" placeholder="Email" name="email"
+                                                       value="{{ user.email }}" readonly required>
+                                            </div>
+                                            <textarea placeholder="Комментарий..." name="text" id="contactcomment"
+                                                      required></textarea>
+                                            <button onclick="javascript://" type="submit"
+                                                    style="width:500px;line-height: 20px;background: #cc0000;border-radius: 5px;"
+                                                    class="site-btn floating-button">Отправить
+                                            </button>
+                                        </form>
+                                    </div>
+                                    {% else %}
+                                    <h6 style="color: #cc2900">Чтобы оставить коментарий, пожалуйста <a
+                                            href="{% url 'register' %}" style="color: #cc2900;"><u>зарегестрируйтесь</u>.</a>
+                                    </h6>
+                                    {% endif %}
+                                    <br>
+                                    <hr>
+                                    <br>
+
+
+                                    <div class="single-post__comment">
+                                        {% for review in game.get_review %}
+                                            <div class="single-post__comment__item">
+                                                <div class="single-post__comment__item__pic">
+                                                    <img src="{% static 'icons/gamer_avatar_icon_133991.png' %}" alt="">
+                                                </div>
+                                                <div class="single-post__comment__item__text">
+                                                    <h6>{{ review.name }}</h6>
+                                                    <span>{{ review.created_at|date:"j M Y" }}</span>
+                                                    <p>{{ review.text }}</p>
+                                                    <ul>
+                                                        <li><a style="font-size: small" href="#formReview"onclick="addReview('{{ review.name }}', '{{ review.id }}')">Ответить</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            {% for rew in review.reviews_set.all.reverse %}
+                                                <div class="single-post__comment__item single-post__comment__item--reply">
+                                                    <div class="single-post__comment__item__pic" style="border-left: 2px inset;"">
+                                                        <img src="{% static 'icons/gamer_avatar_icon_133991.png' %}" alt="">
+                                                    </div>
+                                                    <div class="single-post__comment__item__text">
+                                                        <h6>{{ rew.name }}</h6>
+                                                        <span>{{ rew.created_at|date:"j M Y" }}</span>
+                                                        <p>{{ rew.text }}</p>
+                                                    </div>
+                                                    <hr>
+                                                </div>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <div class="mn-list">
+                                        <h2 style="font-size: 19px;">Последние добавленные:</h2>
+                                        <ul>
+                                            {% for game in created_at %}
+                                            <li><a href="{{ game.get_absolute_url }}"
+                                                   style="font-size:15px;line-height: 17px;">{{ game.title }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <a href="#" class="scrollup">Наверх</a>
+    </section>
+
+    <script type="text/javascript">
+        function addReview(name, id) {
+            document.getElementById("contactparent").value = id;
+            document.getElementById("contactcomment")
+        }
+
+
+
+    </script>
+
+    <script>
+        function AddToDatabase(url) {
+            window.open(url);
+        }
+
+
+
+    </script>
+
+<script>
+    // Add star rating
+    const rating = document.querySelector('form[name=rating]');
+
+    rating.addEventListener("change", function (e) {
+        // Получаем данные из формы
+        let data = new FormData(this);
+        fetch(`${this.action}`, {
+            method: 'POST',
+            body: data
+        })
+            .then(response => alert("Рейтинг установлен"))
+            .catch(error => alert("Ошибка"))
+    });
+
+
+
+</script>
+
+{% endblock content %}

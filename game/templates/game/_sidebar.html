@@ -1,0 +1,67 @@
+{% load game_tags %}
+
+
+
+<div class="side-bar col-lg-3">
+
+    <div class="search-bar w3layouts-newsletter">
+        <h3 class="sear-head editContent">Поиск игры</h3>
+        <form action="{% url 'search' %}" method="get" class="d-flex editContent">
+            {% csrf_token %}
+            <input type="search" placeholder="Введите название..." name="q" class="form-control"
+                   required="">
+            <button type="submit" class="btn1 btn"><span class="fa fa-search" aria-hidden="true"></span></button>
+        </form>
+    </div>
+
+
+    <div class="left-side my-4">
+        <div class="sidebar">
+            <div class="sidebar-widget">
+                <h3 class="sear-head editContent">Жанры</h3>
+                <div class="tags">
+                    {% for genre in genres %}
+                        <a class="floating-button catbat" style="width:49%; font-size:10px" href="{{ genre.get_absolute_url }}">{{ genre.title }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="left-side my-4">
+        <div class="sidebar">
+            <div class="sidebar-widget">
+                <h3 class="sear-head editContent">Категории</h3>
+                <div class="tags">
+                    {% for category in categories %}
+                        <a class="floating-button catbat" style="width: {{ percent }}%" href="{{ category.get_absolute_url }}">{{ category.title }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <span class="msg"></span>
+
+    <div class="left-side my-4">
+        <div class="deal-leftmk left-side">
+            <h3 class="sear-head editContent">Популярные игры</h3>
+            <div class="container">
+                <div class="row">
+                    {% for game in popular %}
+                        <div class="img-deals col-md-{{ md }}">
+                            <center><a href="{{ game.get_absolute_url }}"><img src="{{ game.poster.url }}" class="img-fluid" alt="" style="margin-top: 5px;height:130px"></a></center>
+                            <center>
+                                <div class="img-deal1 col-md-12">
+                                    <a class="editContent" href="{{ game.get_absolute_url }}">{{ game.title }}</a>
+                                </div>
+                            </center>
+                            <hr style="margin: 3px 0">
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
